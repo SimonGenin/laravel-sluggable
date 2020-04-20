@@ -162,10 +162,22 @@ class HasSlugTest extends TestCase
             ['é', 'e'],
             ['è', 'e'],
             ['à', 'a'],
-            ['a€', 'a-euro'],
+            ['a€', 'aeur'],
             ['ß', 'ss'],
             ['a/ ', 'a'],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_handle_multibytes_characters_cutting_when_generating_the_slug()
+    {
+        $model = TestModel::create(['name' => 'là']);
+        $model->setSlugOptions($model->getSlugOptions()->slugsShouldBeNoLongerThan(2));
+        $model->generateSlug();
+
+        $this->assertEquals('la', $model->url);
     }
 
     /** @test */
